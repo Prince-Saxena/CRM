@@ -1,8 +1,8 @@
 import axios from "axios"
 
 const API = axios.create({
-	baseURL: "http://localhost:3000/api/crm",
-	withCredentials:true
+	baseURL: import.meta.env.VITE_API_URL,
+	withCredentials: true,
 });
 
 export const regUser = async (data) => API.post("/user/register",data)
