@@ -12,3 +12,13 @@ export const getAllDealers = async () => API.get("/admin/dealers");
 export const getAllOrder = async () => API.get("/admin/orders");
 export const verifyDealer = async (dealerId) => API.patch(`/admin/verify-dealer/${dealerId}`);
 export const createLead = async (leadData) => API.post("/admin/new-lead", leadData);
+// Create Task
+export const createTask = async (data) => API.post("/task/create", data);
+
+// Get All Tasks (Admin)
+export const getAllTask = async () => API.get("/task/alltasks");
+
+// Cancel Task
+export const cancelTask = async (id) => API.patch(`/task/cancel/${id}`);
+export const getTaskMeta = () => API.get("/task/task-meta");
+

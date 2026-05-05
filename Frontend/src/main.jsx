@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Leads from "./pages/Lead.jsx";
 import Dealers from "./pages/Dealer.jsx";
 import Order from "./pages/Order.jsx";
+import Task from "./pages/Task.jsx";
 import { UserContextProvider } from "./context/userContextProvider.jsx";
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
 			>
 				<Route index element={<Dashboard />} />
 				<Route path="leads" element={<Leads />} />
+				<Route path="task" element={<Task />} />
 				<Route path="dealers" element={<Dealers />} />
 				<Route path="orders" element={<Order />} />
 				<Route path="profile" element={<Profile />} />
