@@ -4,12 +4,9 @@ import { createTask, getAllTask, cancelTask, getTaskMeta } from "../api/adminAPI
 import { getMyTask, updTask } from "../api/dealerAPI.jsx";
 import Toast from "../components/Toast.jsx";
 
-// ─── Constants ─────────────────────────
 const TASK_TYPES = ["call", "whatsapp", "meeting", "visit", "demo", "followup", "payment"];
-
 const STATUS_OPTIONS = ["pending", "completed", "overdue"];
 
-// ─── Status Badge ──────────────────────
 const STATUS_MAP = {
 	pending: { bg: "bg-amber-50", text: "text-amber-700" },
 	completed: { bg: "bg-emerald-50", text: "text-emerald-700" },
@@ -22,7 +19,6 @@ function StatusBadge({ status }) {
 	return <span className={`px-2 py-1 text-[11px] rounded-full ${s.bg} ${s.text}`}>{status}</span>;
 }
 
-// ─── Main Component ────────────────────
 export default function Task() {
 	const { user } = useUser();
 
@@ -87,17 +83,15 @@ export default function Task() {
 		}
 	};
 
-	// ─── Dealer Status Change ─────────────
+	// ─── Status Change ───────────────────
 	const handleStatusChange = async (id, status) => {
 		await updTask(id, { status, remark: "updated" });
-
 		setTasks((prev) => prev.map((t) => (t._id === id ? { ...t, status } : t)));
 	};
 
-	// ─── Cancel Task (Admin) ─────────────
+	// ─── Cancel Task ─────────────────────
 	const handleCancel = async (id) => {
 		await cancelTask(id);
-
 		setTasks((prev) => prev.map((t) => (t._id === id ? { ...t, status: "cancelled" } : t)));
 	};
 
@@ -109,12 +103,11 @@ export default function Task() {
 
 	return (
 		<div className="bg-white rounded-xl shadow border">
-			{/* Toast */}
 			{toast && (
 				<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
 			)}
 
-			{/* ─── Create Task (Admin Only) ─── */}
+			{/* ─── Create Task ─── */}
 			{user.role === "admin" && (
 				<div className="p-5 border-b">
 					<h2 className="text-sm font-bold mb-3">Create Task</h2>
@@ -128,7 +121,6 @@ export default function Task() {
 							className="border p-2 rounded text-sm"
 						/>
 
-						{/* Type Dropdown */}
 						<select
 							value={form.type}
 							onChange={(e) => setForm({ ...form, type: e.target.value })}
@@ -158,7 +150,7 @@ export default function Task() {
 								const dealerId = e.target.value;
 
 								const filtered = leads.filter(
-									(l) => l.assignedDealer?.toString() === dealerId,
+									(l) => String(l.assignedDealer) === String(dealerId),
 								);
 
 								setFilteredLeads(filtered);
@@ -197,8 +189,8 @@ export default function Task() {
 
 								const filtered = leads.filter(
 									(l) =>
-										l.assignedDealer?.toString() ===
-										selectedLead?.assignedDealer?.toString(),
+										String(l.assignedDealer) ===
+										String(selectedLead?.assignedDealer),
 								);
 
 								setFilteredLeads(filtered);
@@ -206,11 +198,16 @@ export default function Task() {
 							className="border p-2 rounded text-sm"
 						>
 							<option value="">Select Lead</option>
-							{(filteredLeads.length > 0 ? filteredLeads : leads).map((l) => (
-								<option key={l._id} value={l._id}>
-									{l.name}
-								</option>
-							))}
+
+							{filteredLeads.length > 0 ? (
+								filteredLeads.map((l) => (
+									<option key={l._id} value={l._id}>
+										{l.name}
+									</option>
+								))
+							) : (
+								<option value="">NA</option>
+							)}
 						</select>
 
 						<button className="col-span-2 bg-blue-600 text-white py-2 rounded text-sm">
@@ -261,7 +258,6 @@ export default function Task() {
 
 							{task.status !== "cancelled" && (
 								<>
-									{/* Dealer dropdown */}
 									{user.role === "dealer" && (
 										<select
 											value={task.status}
@@ -278,7 +274,6 @@ export default function Task() {
 										</select>
 									)}
 
-									{/* Admin cancel */}
 									{user.role === "admin" && (
 										<button
 											onClick={() => handleCancel(task._id)}
